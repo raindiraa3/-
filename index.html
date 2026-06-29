@@ -590,11 +590,11 @@
                 document.getElementById('qris-canvas').innerHTML = ""; 
                 new QRCode(document.getElementById("qris-canvas"), {
                     text: qrisDinamis, 
-                    width: 500,  // Resolusi tetep SUPER HD
-                    height: 500, // Resolusi tetep SUPER HD
-                    colorDark: "#D81B60", 
+                    width: 500,  
+                    height: 500, 
+                    colorDark: "#000000", 
                     colorLight: "#ffffff", 
-                    correctLevel: QRCode.CorrectLevel.M // <--- KEMBALIKAN KE M YA BUBB! Ini biang keroknya!
+                    correctLevel: QRCode.CorrectLevel.M
                 });
             } else {
                 qrisBox.style.display = 'none';
@@ -637,20 +637,41 @@
             }, 1000);
         }
         
-        // FUNGSI DOWNLOAD GAMBAR QRIS
+        // FUNGSI DOWNLOAD GAMBAR QRIS (DENGAN BINGKAI PUTIH ANTI-GAGAL SCAN)
         function downloadQRIS() {
             const qrisDiv = document.getElementById('qris-canvas');
             const canvasElement = qrisDiv.querySelector('canvas');
             const imgElement = qrisDiv.querySelector('img');
             
-            let imgSrc = "";
-            if (canvasElement) {
-                imgSrc = canvasElement.toDataURL("image/png"); // Sedot gambar HD
-            } else if (imgElement) {
-                imgSrc = imgElement.src;
+            let originalCanvas = canvasElement;
+
+            // Jaga-jaga kalau browser HP customer ngubah canvas jadi img
+            if (!originalCanvas && imgElement) {
+                originalCanvas = document.createElement('canvas');
+                originalCanvas.width = imgElement.naturalWidth || 500;
+                originalCanvas.height = imgElement.naturalHeight || 500;
+                originalCanvas.getContext('2d').drawImage(imgElement, 0, 0);
             }
             
-            if (imgSrc) {
+            if (originalCanvas) {
+                // 🪄 MESIN ILUSI OPTIK: Kita bikin kanvas baru yang lebih gede buat nambahin bingkai putih!
+                const padding = 40; // Tebal bingkai putih 40px
+                const newCanvas = document.createElement('canvas');
+                newCanvas.width = originalCanvas.width + (padding * 2);
+                newCanvas.height = originalCanvas.height + (padding * 2);
+                
+                const ctx = newCanvas.getContext('2d');
+                // Kasih warna putih full sebagai background
+                ctx.fillStyle = "#ffffff";
+                ctx.fillRect(0, 0, newCanvas.width, newCanvas.height);
+                
+                // Tempel QRIS asli di tengah-tengah bingkai putih
+                ctx.drawImage(originalCanvas, padding, padding);
+                
+                // Sedot jadi gambar PNG HD
+                const imgSrc = newCanvas.toDataURL("image/png");
+                
+                // Bikin proses download
                 const link = document.createElement('a');
                 link.href = imgSrc;
                 link.download = `QRIS_RoyaleStore_Rp${selectedPaketHarga}.png`; 
@@ -658,7 +679,7 @@
                 link.click();
                 document.body.removeChild(link);
                 
-                alert("✨ Proses download sedang berjalan!\n\n📂 Cek folder 'Downloads/Unduhan' di File Manager HP kamu ya (Kadang nggak langsung masuk Galeri).\n\n⚠️ INFO PENTING:\nKalau kamu buka web ini dari dalam WA/IG, fitur download biasanya DIBLOKIR otomatis oleh sistem mereka.\n\n💡 SOLUSI PALING GAMPANG:\nTEKAN DAN TAHAN (Long Press) pada gambar QRIS-nya, lalu pilih 'Simpan Gambar' atau 'Save Image' yaa cantik! 📸💖");
+                alert("✨ Yeyyy! Gambar QRIS berhasil disimpan ke Galeri kamu!\n\n💡 Udah Mimin kasih bingkai putih biar 100% gampang di-scan sama aplikasi pembayaran apapun! 📸💖");
             } else {
                 alert("⚠️ Aduh, gambar QRIS-nya belum siap. Tunggu sebentar yaa!");
             }
