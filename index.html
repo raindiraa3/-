@@ -309,6 +309,15 @@
             opacity: 1;
             transform: translateY(0);
         }
+        
+                /* === BIKIN QRIS SUPER HD TAPI TETEP CUTE DI LAYAR === */
+        #qris-canvas canvas, 
+        #qris-canvas img {
+            width: 100% !important;
+            max-width: 220px !important;
+            height: auto !important;
+            margin: 0 auto;
+        }
     </style>
 </head>
 <body>
@@ -581,11 +590,11 @@
                 document.getElementById('qris-canvas').innerHTML = ""; 
                 new QRCode(document.getElementById("qris-canvas"), {
                     text: qrisDinamis, 
-                    width: 220, // Dibesarin biar gampang di-scan
-                    height: 220, 
-                    colorDark: "#D81B60", // Warna pinknya digelapin banget biar kontras tinggi!
+                    width: 500,  // <--- UBAH JADI 500 BIAR RESOLUSINYA SUPER HD!
+                    height: 500, // <--- UBAH JADI 500 BIAR RESOLUSINYA SUPER HD!
+                    colorDark: "#D81B60", 
                     colorLight: "#ffffff", 
-                    correctLevel: QRCode.CorrectLevel.M
+                    correctLevel: QRCode.CorrectLevel.H // <--- Naikkin ke H (High) biar anti-gagal di-scan!
                 });
             } else {
                 qrisBox.style.display = 'none';
