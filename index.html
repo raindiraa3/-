@@ -631,23 +631,27 @@
         // FUNGSI DOWNLOAD GAMBAR QRIS
         function downloadQRIS() {
             const qrisDiv = document.getElementById('qris-canvas');
+            const canvasElement = qrisDiv.querySelector('canvas');
             const imgElement = qrisDiv.querySelector('img');
             
-            if (imgElement) {
-                // Ambil data gambar dari canvas (base64)
-                const imgSrc = imgElement.src;
-                
-                // Bikin link rahasia buat ngunduh
+            let imgSrc = "";
+            if (canvasElement) {
+                imgSrc = canvasElement.toDataURL("image/png"); // Sedot gambar HD
+            } else if (imgElement) {
+                imgSrc = imgElement.src;
+            }
+            
+            if (imgSrc) {
                 const link = document.createElement('a');
                 link.href = imgSrc;
-                link.download = `QRIS_RoyaleStore_${selectedPaketHarga}.png`; 
+                link.download = `QRIS_RoyaleStore_Rp${selectedPaketHarga}.png`; 
                 document.body.appendChild(link);
-                link.click(); // Pencet linknya
-                document.body.removeChild(link); // Hapus lagi
+                link.click();
+                document.body.removeChild(link);
                 
-                alert("✨ Yeyyy! Gambar QRIS berhasil disimpan ke Galeri kamu! Silakan buka aplikasi M-Banking/E-Wallet buat bayar yaa luvv.");
+                alert("✨ Proses download sedang berjalan!\n\n📂 Cek folder 'Downloads/Unduhan' di File Manager HP kamu ya (Kadang nggak langsung masuk Galeri).\n\n⚠️ INFO PENTING:\nKalau kamu buka web ini dari dalam WA/IG, fitur download biasanya DIBLOKIR otomatis oleh sistem mereka.\n\n💡 SOLUSI PALING GAMPANG:\nTEKAN DAN TAHAN (Long Press) pada gambar QRIS-nya, lalu pilih 'Simpan Gambar' atau 'Save Image' yaa cantik! 📸💖");
             } else {
-                alert("⚠️ Aduh, gambar QRIS nya belum siap. Tunggu sebentar yaa!");
+                alert("⚠️ Aduh, gambar QRIS-nya belum siap. Tunggu sebentar yaa!");
             }
         }
         
