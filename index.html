@@ -190,19 +190,6 @@
         .btn-wa { background: #25D366; color: #fff; width: 100%; padding: 15px; border-radius: 20px; border: none; font-family: 'Quicksand'; font-weight: 700; font-size: 1rem; cursor: pointer; box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3); transition: 0.3s;}
         .btn-wa:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(37, 211, 102, 0.5); }
         
-        /* TOMBOL DOWNLOAD QRIS AESTHETIC */
-        .btn-dl-qris {
-            background: var(--primary-light); color: var(--text-dark);
-            width: 100%; padding: 12px; border-radius: 15px; border: 1px dashed var(--primary);
-            font-family: 'Quicksand'; font-weight: 700; font-size: 0.9rem; cursor: pointer;
-            margin-bottom: 15px; transition: 0.3s;
-            display: flex; justify-content: center; align-items: center; gap: 8px;
-        }
-        .btn-dl-qris:hover {
-            background: var(--primary); color: #fff;
-            transform: translateY(-2px);
-        }
-
         .close-btn { position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 1.2rem; color: var(--text-soft); cursor: pointer; }
 
         /* === FLOATING CS === */
@@ -309,15 +296,6 @@
             opacity: 1;
             transform: translateY(0);
         }
-        
-                /* === BIKIN QRIS SUPER HD TAPI TETEP CUTE DI LAYAR === */
-        #qris-canvas canvas, 
-        #qris-canvas img {
-            width: 100% !important;
-            max-width: 220px !important;
-            height: auto !important;
-            margin: 0 auto;
-        }
     </style>
 </head>
 <body>
@@ -405,8 +383,7 @@
             <!-- Tempat QRIS -->
             <div id="qris-box" style="display:none; margin-bottom: 20px;">
                 <p style="font-size: 0.85rem; color: var(--text-soft); margin-bottom: 10px;">Scan QR Code di bawah ini ya cantik:</p>
-                <div id="qris-canvas" style="display:flex; justify-content:center; padding:15px; border:2px dashed var(--primary-light); border-radius:20px; margin-bottom: 15px;"></div>
-                <button class="btn-dl-qris" onclick="downloadQRIS()"><i class="fas fa-download"></i> Simpan Gambar QRIS 📸</button>
+                <div id="qris-canvas" style="display:flex; justify-content:center; padding:10px; border:2px dashed var(--primary-light); border-radius:20px;"></div>
             </div>
 
             <button class="btn-wa" id="btn-lanjut" onclick="kirimKeWA()">Kirim Bukti ke WhatsApp <i class="fab fa-whatsapp"></i></button>
@@ -584,17 +561,13 @@
             let qrisBox = document.getElementById('qris-box');
             if(selectedPay === 'QRIS') {
                 qrisBox.style.display = 'block';
+                // PAKE KODE QRIS SEMENTARA KAMU YAA (Royale Store DP)
                 let myPersonalQRIS = "00020101021126570011ID.DANA.WWW011893600915302461190802090246119080303UMI51440014ID.CO.QRIS.WWW0215ID10265240534220303UMI5204654053033605802ID5907yr.apps6010Kab. Paser610576251630441EB"; 
                 let qrisDinamis = buatQRISDinamis(myPersonalQRIS, selectedPaketHarga);
                 
                 document.getElementById('qris-canvas').innerHTML = ""; 
                 new QRCode(document.getElementById("qris-canvas"), {
-                    text: qrisDinamis, 
-                    width: 500,  
-                    height: 500, 
-                    colorDark: "#000000", 
-                    colorLight: "#ffffff", 
-                    correctLevel: QRCode.CorrectLevel.M
+                    text: qrisDinamis, width: 180, height: 180, colorDark: "#FF85B3", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.M
                 });
             } else {
                 qrisBox.style.display = 'none';
@@ -618,7 +591,7 @@
             let btnWa = document.getElementById('btn-lanjut');
             btnWa.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Menyiapkan...`;
             
-            const targetWaNumber = '6283114488191'; 
+            const targetWaNumber = '6283114488191'; // BAGIAN NOMOR GANTI PAKAI NOMOR KAMU YA BUB, JANGAN SAMPE ILANG TANDA KUTIP NYA!! 
             
             const formatPesan = `🎀 *ROYALE STORE | ORDER BARU* 🎀\n\n` +
                                 `Aplikasi : ${selectedApp}\n` +
@@ -637,55 +610,7 @@
             }, 1000);
         }
         
-        // FUNGSI DOWNLOAD GAMBAR QRIS (DENGAN BINGKAI PUTIH ANTI-GAGAL SCAN)
-        function downloadQRIS() {
-            const qrisDiv = document.getElementById('qris-canvas');
-            const canvasElement = qrisDiv.querySelector('canvas');
-            const imgElement = qrisDiv.querySelector('img');
-            
-            let originalCanvas = canvasElement;
-
-            // Jaga-jaga kalau browser HP customer ngubah canvas jadi img
-            if (!originalCanvas && imgElement) {
-                originalCanvas = document.createElement('canvas');
-                originalCanvas.width = imgElement.naturalWidth || 500;
-                originalCanvas.height = imgElement.naturalHeight || 500;
-                originalCanvas.getContext('2d').drawImage(imgElement, 0, 0);
-            }
-            
-            if (originalCanvas) {
-                // 🪄 MESIN ILUSI OPTIK: Kita bikin kanvas baru yang lebih gede buat nambahin bingkai putih!
-                const padding = 40; // Tebal bingkai putih 40px
-                const newCanvas = document.createElement('canvas');
-                newCanvas.width = originalCanvas.width + (padding * 2);
-                newCanvas.height = originalCanvas.height + (padding * 2);
-                
-                const ctx = newCanvas.getContext('2d');
-                // Kasih warna putih full sebagai background
-                ctx.fillStyle = "#ffffff";
-                ctx.fillRect(0, 0, newCanvas.width, newCanvas.height);
-                
-                // Tempel QRIS asli di tengah-tengah bingkai putih
-                ctx.drawImage(originalCanvas, padding, padding);
-                
-                // Sedot jadi gambar PNG HD
-                const imgSrc = newCanvas.toDataURL("image/png");
-                
-                // Bikin proses download
-                const link = document.createElement('a');
-                link.href = imgSrc;
-                link.download = `QRIS_RoyaleStore_Rp${selectedPaketHarga}.png`; 
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                
-                alert("✨ Yeyyy! Gambar QRIS berhasil disimpan ke Galeri kamu!\n\n💡 Udah Mimin kasih bingkai putih biar 100% gampang di-scan sama aplikasi pembayaran apapun! 📸💖");
-            } else {
-                alert("⚠️ Aduh, gambar QRIS-nya belum siap. Tunggu sebentar yaa!");
-            }
-        }
-        
-        // === MESIN EFEK SAKURA GUGUR ===
+                // === MESIN EFEK SAKURA GUGUR ===
         function buatSakura() {
             // Mencegah sakura muncul kalau toko lagi tutup (Biar estetikanya nyesuaiin)
             if(!TOKO_BUKA) return; 
