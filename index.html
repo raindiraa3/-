@@ -405,7 +405,7 @@
     <script>
         // 1. PENGATURAN BUKA / TUTUP TOKO MANUAL
         // Ganti jadi false kalau toko mau ditutup, ganti true kalau buka.
-        const TOKO_BUKA = false; 
+        const TOKO_BUKA = true; 
 
         // 2. PENGATURAN BOT TELEGRAM (NOTIFIKASI ORDER)
         // Isi dengan Token Bot dan Chat ID Telegram kamu.
@@ -415,6 +415,7 @@
         // 3. DATABASE PRODUK & STOK
         // Cara atur stok: Ketik 'ready' kalau ada barang, ketik 'sold' kalau habis.
         // Nanti fotonya tinggal ganti "foto-netflix.png" sama nama foto asli yang kamu upload.
+        // JANGAN PAKE TITIK KALO ATUR HARGA BUBBB
         const catalogData = {
             'Netflix Premium': {
                 foto: 'foto-netflix.png', // Ganti dengan path foto/icon netflix kamu
@@ -444,18 +445,18 @@
                 foto: 'viu.png', // Ganti dengan path foto/icon viu kamu
                 desc: 'Nonton drakor jadi lebih puas karna bebas iklan.',
                 paket: [
-                    { nama: 'Viu 1 Bulan Private', harga: 100p, stok: 'sold' },
-                    { nama: 'Viu 6 bulan Private', harga: 180p, stok: 'ready' },  
-                    { nama: 'Viu 1 Tahun Private', harga: 200p, stok: 'ready' },
-                    { nama: 'Viu Lifetime Private', harga: 600p, stok: 'ready' }
+                    { nama: 'Viu 1 Bulan Private', harga: 100, stok: 'sold' },
+                    { nama: 'Viu 6 bulan Private', harga: 180, stok: 'ready' },  
+                    { nama: 'Viu 1 Tahun Private', harga: 200, stok: 'ready' },
+                    { nama: 'Viu Lifetime Private', harga: 600, stok: 'ready' }
                 ]
             },
             'Winkit Premium': {
                 foto: 'winkit.png', // Ganti dengan path foto/icon winkit kamu
                 desc: 'Bikin video kamu makin glowing ya cuma pake Winkit.',
                 paket: [
-                    { nama: '3 hari akun buyyer', harga: 2.100, stok: 'ready' },
-                    { nama: '3 hari akun seller', harga: 3.500, stok: 'ready' }
+                    { nama: '3 hari akun buyyer', harga: 2100, stok: 'ready' },
+                    { nama: '3 hari akun seller', harga: 3500, stok: 'ready' }
                 ]
             }
         };
